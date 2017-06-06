@@ -6,16 +6,16 @@ import net.gf.currency.Price;
  * Holds a trade entered to {@link Market} with {@link Stock}.
  * @author gf
  *
- * @param <T> locale {@link Price}
+ * @param  locale {@link Price}
  */
-public final class Trade<T extends Price> implements Comparable<Long> {
-	private final Stock<T> stock;
+public final class Trade implements Comparable<Long> {
+	private final Stock stock;
 	private final TradeType tradeType;
-	private final T price;
+	private final Price price;
 	private final long quantity;
 	private final Long timestamp;
 
-	public Trade(Stock<T> stock, TradeType tradeType, T price, long quantity, Long timestamp) {
+	public Trade(Stock stock, TradeType tradeType, Price price, long quantity, Long timestamp) {
 		this.stock = stock;
 		this.tradeType = tradeType;
 		this.price = price;
@@ -23,7 +23,7 @@ public final class Trade<T extends Price> implements Comparable<Long> {
 		this.timestamp = timestamp;
 	}
 
-	public Stock<T> getStock() {
+	public Stock getStock() {
 		return this.stock;
 	}
 
@@ -39,7 +39,7 @@ public final class Trade<T extends Price> implements Comparable<Long> {
 		return this.tradeType;
 	}
 
-	public T getPrice() {
+	public Price getPrice() {
 		return this.price;
 	}
 

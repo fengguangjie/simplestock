@@ -8,16 +8,14 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import net.gf.currency.Price;
-
 /**
  * Market holds stocks and trades.
  * @author gf
  *
  */
 public final class Market {
-	private final Map<Stock<? extends Price>, List<Trade<? extends Price>>> stockTrades 
-								= new HashMap<Stock<? extends Price>, List<Trade<? extends Price>>>();
+	private final Map<Stock, List<Trade>> stockTrades 
+								= new HashMap<Stock, List<Trade>>();
 		
 	public static Market getInstance(){
 		return LazyHolder.INSTANCE;
@@ -29,7 +27,7 @@ public final class Market {
 		lock = new ReentrantReadWriteLock();
 	}
 	
-	public void addTrade(Trade<? extends Price> trade) throws MarketException {
+	public void addTrade(Trade trade) throws MarketException {
 		if (trade.getQuantity() < 1)
 			throw new MarketException(trade + " quantity is not greater than 1");
 		
@@ -38,11 +36,11 @@ public final class Market {
 		wlock.lock();
 		
 		try {
-			final Stock<? extends Price> s = trade.getStock();
+			final Stock s = trade.getStock();
 			
-			List<Trade<? extends Price>> array = stockTrades.get(s);
+			List<Trade> array = stockTrades.get(s);
 			if (array == null){
-				array = new ArrayList<Trade<? extends Price>>();
+				array = new ArrayList<Trade>();
 				
 				stockTrades.put(s, array);
 			}
@@ -54,13 +52,13 @@ public final class Market {
 		}
 	}
 	
-	public Map<Stock<? extends Price>, List<Trade<? extends Price>>> getAllTrades(){
+	public Map<Stock, List<Trade>> getAllTrades(){
 		final Lock rlock = lock.readLock();
 		
 		rlock.lock();
 		try {
-			final Map<Stock<? extends Price>, List<Trade<? extends Price>>> ret 
-						= new HashMap<Stock<? extends Price>, List<Trade<? extends Price>>>();
+			final Map<Stock, List<Trade>> ret 
+						= new HashMap<Stock, List<Trade>>();
 			ret.putAll(stockTrades);
 			return ret;
 		} finally{

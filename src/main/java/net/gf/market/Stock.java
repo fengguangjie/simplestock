@@ -1,7 +1,6 @@
 package net.gf.market;
 
 import net.gf.currency.Price;
-import net.gf.market.StockType;
 
 /**
  * Holds a stock information.
@@ -9,40 +8,27 @@ import net.gf.market.StockType;
  *
  * @param <T> locale price
  */
-public final class Stock<T extends Price> {
+public abstract class Stock {
 
 	private final String stockSymbol;
 
-	private final StockType stockType;
+	private Price lastDividend;
 
-	private T lastDividend;
+	private Price parValue;
 
-	private final double fixedDividend;
-
-	private T parValue;
-
-	public Stock(String stockSymbol, StockType stockType, T lastDividend, Double fixedDividend,
-			T parValue) throws StockException {
-		if (stockType == StockType.PREFERRED && fixedDividend.doubleValue() == -1)
-			throw new StockException("Preferred type stock should define fixedDividend.");
+	protected Stock(String stockSymbol, Price lastDividend, Price parValue) {
 		
 		this.stockSymbol = stockSymbol;
-		this.stockType = stockType;
 		this.lastDividend = lastDividend;
-		this.fixedDividend = fixedDividend;
 		this.parValue = parValue;
 	}
 
-	public double getFixedDividend() {
-		return this.fixedDividend;
-	}
-
-	public T getLastDividend() {
+	public Price getLastDividend() {
 		return this.lastDividend;
 	}
 
 
-	public T getParValue() {
+	public Price getParValue() {
 		
 		return this.parValue;
 	}
@@ -52,17 +38,12 @@ public final class Stock<T extends Price> {
 		return this.stockSymbol;
 	}
 
-	public StockType getStockType() {
-		
-		return this.stockType;
-	}
-
-	public void setLastDividend(T lastDividend) {
+	public void setLastDividend(Price lastDividend) {
 		this.lastDividend = lastDividend;
 
 	}
 
-	public void setParValue(T parValue) {
+	public void setParValue(Price parValue) {
 		this.parValue = parValue;
 	}
 
@@ -74,7 +55,6 @@ public final class Stock<T extends Price> {
 		return result;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -83,7 +63,7 @@ public final class Stock<T extends Price> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Stock<T> other = (Stock<T>) obj;
+		Stock other = (Stock) obj;
 		if (stockSymbol == null) {
 			if (other.stockSymbol != null)
 				return false;
@@ -91,4 +71,6 @@ public final class Stock<T extends Price> {
 			return false;
 		return true;
 	}
+	
+	public abstract double getDividendYield(final Price price);
 }

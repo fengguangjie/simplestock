@@ -11,9 +11,9 @@ import net.gf.market.Stock;
  */
 public interface MarketCalculatorService {
 	
-	public double getDividendYield(Stock<? extends Price> stock, Price price) throws MarketCalculatorServiceException;
+	public double getDividendYield(Stock stock, Price price) throws MarketCalculatorServiceException;
 	
-	public double getPERatio(Stock<? extends Price> stock, Price price) throws MarketCalculatorServiceException;
+	public double getPERatio(Stock stock, Price price) throws MarketCalculatorServiceException;
 	
 	public Price getVolumeWeightStockPrice(long now, long pastDuration) throws MarketCalculatorServiceException, PriceException;
 	

@@ -5,12 +5,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import net.gf.currency.PriceHelper;
 import net.gf.currency.Price;
 import net.gf.currency.PriceException;
+import net.gf.currency.PriceHelper;
 import net.gf.market.Market;
 import net.gf.market.Stock;
-import net.gf.market.StockType;
 import net.gf.market.Trade;
 
 /**
@@ -29,14 +28,14 @@ public final class SimpleCalculator implements MarketCalculatorService {
 	@Override
 	public Price getVolumeWeightStockPrice(final long now, final long pastDuration) throws MarketCalculatorServiceException, PriceException {
 		
-		final Map<Stock<? extends Price>, List<Trade<? extends Price>>> trades = market.getAllTrades();
+		final Map<Stock, List<Trade>> trades = market.getAllTrades();
 		
 		double ret = 0;
 		long quantity = 0;
 		Currency currency = null;
 		
-		for (List<Trade<? extends Price>> list : trades.values()){
-			for (Trade<? extends Price> trade : list) {
+		for (List<Trade> list : trades.values()){
+			for (Trade trade : list) {
 				if ((now - trade.getTimestamp()) <= pastDuration) {
 					if (currency == null)
 						currency = trade.getPrice().getCurrency();
@@ -59,14 +58,14 @@ public final class SimpleCalculator implements MarketCalculatorService {
 
 	@Override
 	public Price getGeometricMean() throws PriceException {
-		final Map<Stock<? extends Price>, List<Trade<? extends Price>>> trades = market.getAllTrades();
+		final Map<Stock, List<Trade>> trades = market.getAllTrades();
 		
 		double ret = 1;
 		long n = 1;
 		Currency currency = null;
 		
-		for (List<Trade<? extends Price>> list : trades.values()){
-			for (Trade<? extends Price> trade : list) {
+		for (List<Trade> list : trades.values()){
+			for (Trade trade : list) {
 				if (currency == null)
 					currency = trade.getPrice().getCurrency();
 				
@@ -80,22 +79,18 @@ public final class SimpleCalculator implements MarketCalculatorService {
 	}
 
 	@Override
-	public double getDividendYield(final Stock<? extends Price> stock, final Price price) throws MarketCalculatorServiceException {
+	public double getDividendYield(final Stock stock, final Price price) throws MarketCalculatorServiceException {
 		if (price.getValue() <= 0)
 			throw new MarketCalculatorServiceException(stock + " Price is not larger than 0");
 		
-		if (stock.getStockType() == StockType.COMMON) {
-			return stock.getLastDividend().getValue()/price.getValue();
-		} else if (stock.getStockType() == StockType.PREFERRED) {
-			return (stock.getFixedDividend() * stock.getParValue().getValue())/price.getValue();
-		} else
-			throw new MarketCalculatorServiceException(stock + " unknown stock type.");
+		return stock.getDividendYield(price);
+		
 	}
 
 	@Override
-	public double getPERatio(final Stock<? extends Price> stock, final Price price) throws MarketCalculatorServiceException {
-		if (stock.getLastDividend().getValue() == 0)
-			return -1;
+	public double getPERatio(final Stock stock, final Price price) throws MarketCalculatorServiceException {
+		if (price.getValue() <= 0)
+			throw new MarketCalculatorServiceException(stock + " Price is not larger than 0");
 		
 		return price.getValue()/stock.getLastDividend().getValue();
 	}
