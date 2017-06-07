@@ -8,7 +8,6 @@ import java.util.Map;
 import net.gf.currency.Price;
 import net.gf.currency.PriceException;
 import net.gf.currency.PriceHelper;
-import net.gf.market.Market;
 import net.gf.market.Stock;
 import net.gf.market.Trade;
 
@@ -19,16 +18,11 @@ import net.gf.market.Trade;
  */
 public final class SimpleCalculator implements MarketCalculatorService {
 	
-	private final Market market;
-	
-	public SimpleCalculator(Market market) {
-		this.market = market;
+	public SimpleCalculator() {
 	}
 
 	@Override
-	public Price getVolumeWeightStockPrice(final long now, final long pastDuration) throws MarketCalculatorServiceException, PriceException {
-		
-		final Map<Stock, List<Trade>> trades = market.getAllTrades();
+	public Price getVolumeWeightStockPrice(final Map<Stock, List<Trade>> trades, final long now, final long pastDuration) throws MarketCalculatorServiceException, PriceException {
 		
 		double ret = 0;
 		long quantity = 0;
@@ -57,8 +51,7 @@ public final class SimpleCalculator implements MarketCalculatorService {
 	}
 
 	@Override
-	public Price getGeometricMean() throws PriceException {
-		final Map<Stock, List<Trade>> trades = market.getAllTrades();
+	public Price getGeometricMean(final Map<Stock, List<Trade>> trades) throws PriceException {
 		
 		double ret = 1;
 		long n = 1;
@@ -84,7 +77,6 @@ public final class SimpleCalculator implements MarketCalculatorService {
 			throw new MarketCalculatorServiceException(stock + " Price is not larger than 0");
 		
 		return stock.getDividendYield(price);
-		
 	}
 
 	@Override

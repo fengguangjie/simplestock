@@ -14,8 +14,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  *
  */
 public final class Market {
-	private final Map<Stock, List<Trade>> stockTrades 
-								= new HashMap<Stock, List<Trade>>();
+	private final Map<Stock, List<Trade>> stockTrades = new HashMap<>();
 		
 	public static Market getInstance(){
 		return LazyHolder.INSTANCE;
@@ -36,16 +35,16 @@ public final class Market {
 		wlock.lock();
 		
 		try {
-			final Stock s = trade.getStock();
+			final Stock stock = trade.getStock();
 			
-			List<Trade> array = stockTrades.get(s);
-			if (array == null){
-				array = new ArrayList<Trade>();
+			List<Trade> tradeList = stockTrades.get(stock);
+			if (tradeList == null){
+				tradeList = new ArrayList<Trade>();
 				
-				stockTrades.put(s, array);
+				stockTrades.put(stock, tradeList);
 			}
 			
-			array.add(trade);
+			tradeList.add(trade);
 			
 		} finally{
 			wlock.unlock();

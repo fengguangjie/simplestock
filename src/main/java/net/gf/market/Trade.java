@@ -13,9 +13,9 @@ public final class Trade implements Comparable<Long> {
 	private final TradeType tradeType;
 	private final Price price;
 	private final long quantity;
-	private final Long timestamp;
+	private final long timestamp;
 
-	public Trade(Stock stock, TradeType tradeType, Price price, long quantity, Long timestamp) {
+	public Trade(Stock stock, TradeType tradeType, Price price, long quantity, long timestamp) {
 		this.stock = stock;
 		this.tradeType = tradeType;
 		this.price = price;
@@ -27,7 +27,7 @@ public final class Trade implements Comparable<Long> {
 		return this.stock;
 	}
 
-	public Long getTimestamp() {
+	public long getTimestamp() {
 		return this.timestamp;
 	}
 
@@ -45,7 +45,7 @@ public final class Trade implements Comparable<Long> {
 
 	@Override
 	public int compareTo(Long o) {
-		final long thisTimeStamp = this.timestamp.longValue();
+		final long thisTimeStamp = this.timestamp;
 		final long otherTimeStamp = o.longValue();
 		if (thisTimeStamp > otherTimeStamp)
 			return 1;

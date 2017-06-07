@@ -38,15 +38,6 @@ public abstract class Stock {
 		return this.stockSymbol;
 	}
 
-	public void setLastDividend(Price lastDividend) {
-		this.lastDividend = lastDividend;
-
-	}
-
-	public void setParValue(Price parValue) {
-		this.parValue = parValue;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;

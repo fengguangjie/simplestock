@@ -24,7 +24,7 @@ public class App {
 	
 	public App() throws Exception {
 		market = Market.getInstance();
-		service = new SimpleCalculator(market);
+		service = new SimpleCalculator();
 	
 		Stock stock = new CommonStock("TEA",  
 				new UKSterling(0), new UKSterling(100));
@@ -62,7 +62,9 @@ public class App {
 			
 			market.addTrade(t);
 			
-			Thread.sleep(1);
+			System.out.println("trade: " + t);
+			
+			Thread.sleep(1000);
 		}
 	}
 	
@@ -80,13 +82,13 @@ public class App {
 		
 		System.out.println();
 		
-		final Price gm = service.getGeometricMean();
+		final Price gm = service.getGeometricMean(market.getAllTrades());
 		System.out.println("Geometric Mean: " + gm.getValue() + " in " + gm.getCurrency().getDisplayName());
 		
 		final long now = System.currentTimeMillis();
 		final long fifteenMinutes = TimeUnit.MINUTES.toMillis(15);
 		
-		final Price vwsp = service.getVolumeWeightStockPrice(now, fifteenMinutes);
+		final Price vwsp = service.getVolumeWeightStockPrice(market.getAllTrades(), now, fifteenMinutes);
 		System.out.println("Volume Weighted Stock Price: " + vwsp.getValue() + " in " + vwsp.getCurrency().getDisplayName());
 	}
 
