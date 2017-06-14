@@ -12,7 +12,10 @@ public final class PreferredStock extends Stock {
 		this.fixedDividend = fixedDividend;
 	}
 	@Override
-	public double getDividendYield(Price price) {
+	public strictfp double getDividendYield(Price price) {
+		if (price.getValue() == 0)
+			throw new RuntimeException(price + " value is zero.");
+		
 		return (fixedDividend * getParValue().getValue())/price.getValue();
 	}
 

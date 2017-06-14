@@ -9,7 +9,10 @@ public final class CommonStock extends Stock {
 	}
 	
 	@Override
-	public double getDividendYield(Price price) {
+	public strictfp double getDividendYield(Price price) {
+		if (price.getValue() == 0)
+			throw new RuntimeException(price + " value is zero.");
+		
 		return getLastDividend().getValue()/price.getValue();
 	}
 }

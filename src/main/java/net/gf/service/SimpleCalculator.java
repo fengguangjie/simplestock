@@ -22,7 +22,7 @@ public final class SimpleCalculator implements MarketCalculatorService {
 	}
 
 	@Override
-	public Price getVolumeWeightStockPrice(final Map<Stock, List<Trade>> trades, final long now, final long pastDuration) throws MarketCalculatorServiceException, PriceException {
+	public strictfp Price getVolumeWeightStockPrice(final Map<Stock, List<Trade>> trades, final long now, final long pastDuration) throws MarketCalculatorServiceException, PriceException {
 		
 		double ret = 0;
 		long quantity = 0;
@@ -51,7 +51,7 @@ public final class SimpleCalculator implements MarketCalculatorService {
 	}
 
 	@Override
-	public Price getGeometricMean(final Map<Stock, List<Trade>> trades) throws PriceException {
+	public strictfp Price getGeometricMean(final Map<Stock, List<Trade>> trades) throws PriceException {
 		
 		double ret = 1;
 		long n = 1;
