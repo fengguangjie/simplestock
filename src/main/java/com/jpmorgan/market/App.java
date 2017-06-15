@@ -20,9 +20,9 @@ public class App {
 	private final Market market;
 	private final MarketCalculatorService service;
 
-	private final List<Stock> stocks = new ArrayList<Stock>();
+	private final List<Stock> stocks = new ArrayList<>();
 	
-	public App() throws Exception {
+	private App() throws Exception {
 		market = Market.getInstance();
 		service = new SimpleCalculator();
 	
@@ -47,32 +47,31 @@ public class App {
 		stocks.add(stock);
 	}
 	
-	public void trading() throws Exception {
-		final Random r = new Random();
+	private void trading() throws Exception {
+		final Random random = new Random();
 		for (int i = 0; i < 1000; i++) {
-			final Stock s = stocks.get(r.nextInt(stocks.size()));
-			final TradeType tt = TradeType.values()[r.nextInt(TradeType.values().length)];
+			final Stock stock = stocks.get(random.nextInt(stocks.size()));
+			final TradeType tradeType = TradeType.values()[random.nextInt(TradeType.values().length - 1)];
 			
-			final Trade t = new Trade(
-					s, tt,
-					new UKSterling(r.nextDouble()*10 + 0.1),
-					r.nextInt(999) + 1, 
+			final Trade trade = new Trade(stock, tradeType,
+					new UKSterling(random.nextDouble()*10 + 0.1),
+					random.nextInt(999) + 1,
 					System.currentTimeMillis()
 					);
 			
-			market.addTrade(t);
+			market.addTrade(trade);
 			
-			System.out.println("trade: " + t);
+			System.out.println("trade: " + trade);
 			
 			Thread.sleep(1000);
 		}
 	}
 	
-	public void process() throws Exception {
-		final Random r = new Random();
+	private void process() throws Exception {
+		final Random random = new Random();
 		
 		for(Stock stock : stocks) {
-			final Price price = new UKSterling(r.nextDouble()*10);
+			final Price price = new UKSterling(random.nextDouble()*10);
 			System.out.println("Stock Symbol: " + stock.getStockSymbol() 
 					+ " at price " + price.getValue() 
 					+ " in " + price.getCurrency().getDisplayName());
